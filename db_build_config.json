@@ -1,0 +1,26 @@
+{
+    "db_path": "./temp.db",
+    "contents": [
+        {
+            "active": true,
+            "db_filename": "./ter.zip",
+            "display_name": "FR:SNCF (TER)",
+            "fetch_interval_hours": 3,
+            "feed_url": "https://eu.ftp.opendatasoft.com/sncf/gtfs/export-ter-gtfs-last.zip"
+        },
+        {
+            "active":true,
+            "db_filename": "./tgv.zip",
+            "display_name": "FR:SNCF (TGV)",
+            "fetch_interval_hours": 3,
+            "feed_url": "https://eu.ftp.opendatasoft.com/sncf/gtfs/export_gtfs_voyages.zip"
+        },
+        {
+            "active": true,
+            "db_filename": "./ic.zip",
+            "display_name": "FR:SNCF (IC)",
+            "fetch_interval_hours": 3,
+            "feed_url": "https://eu.ftp.opendatasoft.com/sncf/gtfs/export-intercites-gtfs-last.zip"
+        }
+    ]
+}
