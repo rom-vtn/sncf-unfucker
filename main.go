@@ -104,7 +104,7 @@ func rewriteAsUnfucked(f *trainmapdb.Fetcher, outputFile io.Writer) error {
 	//TODO do attributions otherwise things are gonna get legally spicy
 	//TODO unfuck calendar dates (doesn't *strictly* go against the spec but yeah, still urgh)
 	//FIXME that's a temp solution, not guaranteed to work
-	err = rewriteCalendarDates(f, zipWriter)
+	err = unfuckCalendarDates(f, zipWriter)
 	if err != nil {
 		return err
 	}
@@ -175,7 +175,7 @@ func rewriteStops(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
 	return nil
 }
 
-func rewriteCalendarDates(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
+func unfuckCalendarDates(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
 	ONE_DAY := 24 * time.Hour
 	today := time.Now().Truncate(ONE_DAY)
 	yesterday := today.Add(-ONE_DAY)
@@ -188,7 +188,7 @@ func rewriteCalendarDates(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
 	//FIXME take feedId into account
 	for _, serviceDay := range serviceDays {
 		sex := trainmapdb.CalendarDate{
-			ServiceId:     serviceDay.ServiceId,
+			ServiceId:     fmt.Sprintf("%s-%s", serviceDay.FeedId, serviceDay.ServiceId),
 			CsvDate:       serviceDay.Date.Format("20060102"),
 			ExceptionType: trainmapdb.ExceptionTypeServiceAdded,
 		}
@@ -361,6 +361,7 @@ func unfuckTrip(trip trainmapdb.Trip, usageMap *map[feededRouteId]routeUsageStat
 	trip.Headsign = trip.StopTimes[len(trip.StopTimes)-1].Stop.StopName
 	trip.RouteId = fmt.Sprintf("%s-%s-%s", trip.FeedId, routeTypePrefixMapping[routeType], trip.RouteId)
 	trip.TripId = fmt.Sprintf("%s-%s", trip.FeedId, trip.TripId)
+	trip.ServiceId = fmt.Sprintf("%s-%s", trip.FeedId, trip.ServiceId)
 
 	return trip
 }

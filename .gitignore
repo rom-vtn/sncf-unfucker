@@ -2,5 +2,5 @@
 sncf-unfucker*
 
 # no outputs
-out.zip
+*.zip
 temp.db
