@@ -31,7 +31,7 @@ Just build and run the following:
 - [X] Actually have a valid GTFS output
 - [ ] Give stable calendars whenever possible
 - [ ] Add `attributions.txt` in the output file to avoid legally spicy stuff
-- [ ] Make sure calendar ID space is unique
+- [X] Make sure calendar ID space is unique
 
 # Attributions ⚖
 - Credit goes to SNCF for their feeds, which are published under ODbL
