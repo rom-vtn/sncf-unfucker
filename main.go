@@ -12,6 +12,7 @@ import (
 
 	csvutil "github.com/jszwec/csvutil"
 	trainmapdb "github.com/rom-vtn/trainmap-db"
+	"gorm.io/driver/sqlite"
 )
 
 var routeTypePrefixMapping = map[trainmapdb.RouteType]string{
@@ -39,7 +40,7 @@ func main() {
 		panic(err)
 	}
 
-	f, err := trainmapdb.NewFetcher(config.DatabasePath, nil)
+	f, err := trainmapdb.NewFetcher(sqlite.Open(config.DatabasePath), true, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -341,7 +342,7 @@ func unfuckTrip(trip trainmapdb.Trip, usageMap *map[feededRouteId]routeUsageStat
 	routeType := getTripRouteType(trip)
 
 	//store data on usage map
-	frid := feededRouteId{feedId: trip.FeedId, routeId: trip.RouteId}
+	frid := feededRouteId{feedId: trip.FeedId, routeId: trip.RefRouteId}
 	//get status
 	status := (*usageMap)[frid]
 	status.route = *trip.Route //store route
@@ -359,9 +360,9 @@ func unfuckTrip(trip trainmapdb.Trip, usageMap *map[feededRouteId]routeUsageStat
 	//now actually unfuck the headsign UwU
 	trip.TripShortName = trip.Headsign
 	trip.Headsign = trip.StopTimes[len(trip.StopTimes)-1].Stop.StopName
-	trip.RouteId = fmt.Sprintf("%s-%s-%s", trip.FeedId, routeTypePrefixMapping[routeType], trip.RouteId)
+	trip.RefRouteId = fmt.Sprintf("%s-%s-%s", trip.FeedId, routeTypePrefixMapping[routeType], trip.RefRouteId)
 	trip.TripId = fmt.Sprintf("%s-%s", trip.FeedId, trip.TripId)
-	trip.ServiceId = fmt.Sprintf("%s-%s", trip.FeedId, trip.ServiceId)
+	trip.RefServiceId = fmt.Sprintf("%s-%s", trip.FeedId, trip.RefServiceId)
 
 	return trip
 }
