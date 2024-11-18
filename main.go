@@ -242,7 +242,6 @@ func unfuckStopTimes(zipWriter *zip.Writer, allTrips []trainmapdb.Trip) error {
 	var unfuckedStopTimes []trainmapdb.StopTime
 	for _, trip := range allTrips {
 		for _, stopTime := range trip.StopTimes {
-			stopTime.TripId = fmt.Sprintf("%s-%s", trip.FeedId, stopTime.TripId)
 			stopTime.CsvDepartureTime = stopTime.DepartureTime.Format("15:04:05")
 			stopTime.CsvArrivalTime = stopTime.ArrivalTime.Format("15:04:05")
 			unfuckedStopTimes = append(unfuckedStopTimes, stopTime)
@@ -361,7 +360,6 @@ func unfuckTrip(trip trainmapdb.Trip, usageMap *map[feededRouteId]routeUsageStat
 	trip.TripShortName = trip.Headsign
 	trip.Headsign = trip.StopTimes[len(trip.StopTimes)-1].Stop.StopName
 	trip.RefRouteId = fmt.Sprintf("%s-%s-%s", trip.FeedId, routeTypePrefixMapping[routeType], trip.RefRouteId)
-	trip.TripId = fmt.Sprintf("%s-%s", trip.FeedId, trip.TripId)
 	trip.RefServiceId = fmt.Sprintf("%s-%s", trip.FeedId, trip.RefServiceId)
 
 	return trip
