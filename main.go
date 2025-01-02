@@ -237,13 +237,21 @@ func rewriteFeedInfo(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
 	return nil
 }
 
+func formatCsvTime(t time.Time) string {
+	dur := t.Sub(time.Unix(0,0))
+	secs := int(dur.Seconds())
+	mins, secs := secs/60, secs%60
+	hours, mins := mins/60, mins%60
+	return fmt.Sprintf("%02d:%02d:%02d", hours, mins, secs)
+}
+
 func unfuckStopTimes(zipWriter *zip.Writer, allTrips []trainmapdb.Trip) error {
 	//adjust the trip IDs to match the new IDs
 	var unfuckedStopTimes []trainmapdb.StopTime
 	for _, trip := range allTrips {
 		for _, stopTime := range trip.StopTimes {
-			stopTime.CsvDepartureTime = stopTime.DepartureTime.Format("15:04:05")
-			stopTime.CsvArrivalTime = stopTime.ArrivalTime.Format("15:04:05")
+			stopTime.CsvDepartureTime = formatCsvTime(stopTime.DepartureTime)
+			stopTime.CsvArrivalTime = formatCsvTime(stopTime.ArrivalTime)
 			unfuckedStopTimes = append(unfuckedStopTimes, stopTime)
 		}
 	}
