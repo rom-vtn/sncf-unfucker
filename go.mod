@@ -4,7 +4,7 @@ go 1.22.1
 
 require (
 	github.com/jszwec/csvutil v1.10.0
-	github.com/rom-vtn/trainmap-db v0.0.0-20240807112638-96e804be448a
+	github.com/rom-vtn/trainmap-db v0.0.0-20250128234411-a7d27a79ed9e
 )
 
 require (

@@ -179,9 +179,9 @@ func rewriteStops(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
 func unfuckCalendarDates(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
 	ONE_DAY := 24 * time.Hour
 	today := time.Now().Truncate(ONE_DAY)
-	yesterday := today.Add(-ONE_DAY)
+	monthAgo := today.Add(-30 * ONE_DAY)
 	yearFromNow := today.Add(365 * ONE_DAY)
-	serviceDays, err := f.GetServicesBetweenDates(yesterday, yearFromNow)
+	serviceDays, err := f.GetServicesBetweenDates(monthAgo, yearFromNow)
 	if err != nil {
 		return err
 	}
@@ -238,7 +238,7 @@ func rewriteFeedInfo(f *trainmapdb.Fetcher, zipWriter *zip.Writer) error {
 }
 
 func formatCsvTime(t time.Time) string {
-	dur := t.Sub(time.Unix(0,0))
+	dur := t.Sub(time.Unix(0, 0))
 	secs := int(dur.Seconds())
 	mins, secs := secs/60, secs%60
 	hours, mins := mins/60, mins%60
